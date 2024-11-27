@@ -1,0 +1,90 @@
+﻿<Window x:Class="SQL_version.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SQL_version"
+        mc:Ignorable="d"
+        Title="Notizbuch" MinHeight="400" MinWidth="600"
+        Icon="Bilder/Notizbuch.ico">
+    <Window.Resources>
+        <SolidColorBrush x:Key="rscFarbe" Color="LightYellow" />
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="LightBlue" />
+        </Style>
+        <local:DatumKonverter x:Key="Datum" />
+    </Window.Resources>
+
+<Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="0.75cm" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40*" />
+            <ColumnDefinition Width="60*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10">
+        </StackPanel>
+        <DockPanel Grid.Row="1">
+            <Label DockPanel.Dock="Left" Content="Suchtext" VerticalAlignment="Center" />
+            <Button Name="btnSucheAufheben" DockPanel.Dock="Right" Content="X" FontWeight="Bold" Background="Red" Foreground="White" Click="btnClearSearch_Click" Width="12"/>
+            <Button Name="btnSuche" DockPanel.Dock="Right" Content="Suchen" Click="btnSuche_Click"/>
+            <TextBox Name="tbxSuche" />
+        </DockPanel>
+        <TextBox Name="tbxNotiz" Grid.Row="1" Grid.RowSpan="2" Grid.Column="1"
+ Background="{StaticResource rscFarbe}" IsEnabled="False"
+ AcceptsReturn="True" VerticalScrollBarVisibility="Visible"
+ FontFamily="Comic Sans MS" TextChanged="tbxNotiz_TextChanged" />
+
+        <ListBox Name="lbxNotizen" Grid.Row="2" SelectionChanged="lbxNotizen_SelectionChanged" ItemsSource="{Binding}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding ErstelltAm, Converter={StaticResource Datum}, ConverterCulture=de-DE}" 
+                           Foreground="{Binding ErstelltAm, Converter={StaticResource Datum}, ConverterParameter=vordergrund}" 
+                           Background="{Binding ErstelltAm, Converter={StaticResource Datum}, ConverterParameter=hintergrund}" 
+                           FontSize="10" />
+                        <TextBlock Text="{Binding Kategorie}" FontSize="10" Width="60" Margin="5,0" />
+                        <TextBlock Text="{Binding Inhalt}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+
+        <DockPanel Grid.Row="3" Grid.ColumnSpan="2" LastChildFill="False">
+            <Button Name="btnNeu" DockPanel.Dock="Left" Content="Neu" IsEnabled="False" Click="btnNeu_Click" />
+            <Button Name="btnLöschen" DockPanel.Dock="Left" Content="Löschen" IsEnabled="False" Click="btnLöschen_Click"/>
+            <Button Name="btnSpeichern" DockPanel.Dock="Left" Content="Speichern" IsEnabled="False" Click="btnSpeichern_Click"/>
+            <Button Name="btnBeenden" DockPanel.Dock="Right" Content="Beenden" Click="btnBeenden_Click"/>
+        </DockPanel>
+
+        <StackPanel Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+            <Image Source="Bilder/Notizbuch.png" Height="32" Margin="0 0 10 0" />
+            <TextBlock FontWeight="Bold" FontSize="16" Foreground="Green">
+                <TextBlock Text="Kategorie" FontSize="14" 
+                           Foreground="{DynamicResource rscFarbe}" 
+                           VerticalAlignment="Center" Margin="100 0 5 0" />
+                <ComboBox Name="cbxKategorie" Width="200" FontSize="14" VerticalContentAlignment="Center" Padding="10 0" SelectionChanged="cbxKategorie_SelectionChanged">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <!-- Inline-Objekte -->
+                <LineBreak /> Notizen <!-- Inline: Zeilenumbruch-->
+                <Span FontSize="10" FontWeight="Light"> <!-- Inline: Span für neue Formatierung -->
+                    &#169; 2023
+                    <Italic> <!-- Inline: Kursiv-Schrift --> 
+                        <Span Foreground="Blue">C#</Span>
+                        Anwendungsentwicklung
+                    </Italic>
+                </Span>
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</Window>
